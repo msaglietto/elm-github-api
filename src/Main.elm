@@ -1,48 +1,26 @@
 module Main exposing (..)
 
 import Commands exposing (fetchProjects)
-import Html exposing (Html, div, img, text)
 import Models exposing (Model, initialModel)
 import Msgs exposing (Msg)
-import Projects.List
+import Navigation exposing (Location)
+import Routing
+import Update exposing (update)
+import View exposing (view)
 
 
----- MODEL ----
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( initialModel, fetchProjects )
-
-
-
----- UPDATE ----
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Msgs.OnFetchProjects response ->
-            ( { model | projects = response }, Cmd.none )
-
-
-
----- VIEW ----
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ Projects.List.view model.projects ]
-
-
-
----- PROGRAM ----
+init : Location -> ( Model, Cmd Msg )
+init location =
+    let
+        currentRoute =
+            Routing.parseLocation location
+    in
+    ( initialModel currentRoute, fetchProjects currentRoute )
 
 
 main : Program Never Model Msg
 main =
-    Html.program
+    Navigation.program Msgs.OnLocationChange
         { view = view
         , init = init
         , update = update

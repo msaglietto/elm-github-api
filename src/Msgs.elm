@@ -1,8 +1,10 @@
 module Msgs exposing (..)
 
-import Models exposing (Project)
+import Models exposing (SearchResult)
+import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 
 
 type Msg
-    = OnFetchProjects (WebData (List Project))
+    = OnFetchProjects (WebData SearchResult)
+    | OnLocationChange Location
